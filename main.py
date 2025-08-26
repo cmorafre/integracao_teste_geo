@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-ETL GEODATA - Script Principal
-Executa o processo completo de ETL Oracle -> PostgreSQL
+ETL TESTE GEO - Script Principal
+Executa o processo completo de ETL PostgreSQL -> MySQL
 """
 
 import sys
@@ -75,7 +75,7 @@ def validate_environment():
     
     # Validar dependências Python
     required_packages = [
-        'pandas', 'cx_Oracle', 'psycopg2', 'sqlalchemy'
+        'pandas', 'psycopg2', 'mysql.connector', 'sqlalchemy'
     ]
     
     missing_packages = []
@@ -104,7 +104,7 @@ def main():
     
     # Cabeçalho
     logger.info("=" * 80)
-    logger.info("🚀 ETL GEODATA - ORACLE → POSTGRESQL")
+    logger.info("🚀 ETL TESTE GEO - POSTGRESQL → MYSQL")
     logger.info("=" * 80)
     logger.info(f"📅 Execução iniciada em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     logger.info(f"📁 Diretório SQL: {SQL_SCRIPTS_DIR}")
@@ -145,7 +145,7 @@ def main():
             logger.info("🎉 ETL concluído COM SUCESSO!")
             
             # Notificação de sucesso
-            message = f"ETL GEODATA executado com sucesso! {result['processed_files']} arquivos processados, {result['total_records']:,} registros carregados."
+            message = f"ETL TESTE GEO executado com sucesso! {result['processed_files']} arquivos processados, {result['total_records']:,} registros carregados."
             send_notification(message, "SUCCESS")
             
             sys.exit(0)
@@ -163,30 +163,30 @@ def main():
             
             # Notificação de erro
             error_msg = result.get('error', 'Erros durante processamento')
-            message = f"ETL GEODATA falhou! Erro: {error_msg}. {result.get('errors', 0)} erros encontrados."
+            message = f"ETL TESTE GEO falhou! Erro: {error_msg}. {result.get('errors', 0)} erros encontrados."
             send_notification(message, "ERROR")
             
             sys.exit(1)
             
     except KeyboardInterrupt:
         logger.warning("🛑 Processo interrompido pelo usuário")
-        send_notification("ETL GEODATA interrompido pelo usuário", "WARNING")
+        send_notification("ETL TESTE GEO interrompido pelo usuário", "WARNING")
         sys.exit(130)  # Código padrão para Ctrl+C
         
     except Exception as e:
         logger.error(f"💥 ERRO CRÍTICO NÃO TRATADO: {e}", exc_info=True)
-        send_notification(f"ETL GEODATA erro crítico: {e}", "CRITICAL")
+        send_notification(f"ETL TESTE GEO erro crítico: {e}", "CRITICAL")
         sys.exit(1)
         
     finally:
-        logger.info("🔐 Finalizando ETL GEODATA")
+        logger.info("🔐 Finalizando ETL TESTE GEO")
         logger.info(f"⏱️  Execução finalizada em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 def run_test_mode():
     """Executa modo de teste com um arquivo específico"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='ETL GEODATA - Modo Teste')
+    parser = argparse.ArgumentParser(description='ETL TESTE GEO - Modo Teste')
     parser.add_argument('--file', '-f', required=True, help='Arquivo SQL específico para testar')
     parser.add_argument('--dry-run', '-d', action='store_true', help='Apenas validar sem processar')
     
