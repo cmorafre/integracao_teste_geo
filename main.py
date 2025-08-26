@@ -183,12 +183,12 @@ def main():
         logger.info(f"⏱️  Execução finalizada em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 def run_test_mode():
-    """Executa modo de teste com um arquivo específico"""
+    """Executa modo de teste com um arquivo específico ou dry-run completo"""
     import argparse
     
     parser = argparse.ArgumentParser(description='ETL TESTE GEO - Modo Teste')
-    parser.add_argument('--file', '-f', required=True, help='Arquivo SQL específico para testar')
-    parser.add_argument('--dry-run', '-d', action='store_true', help='Apenas validar sem processar')
+    parser.add_argument('--file', '-f', help='Arquivo SQL específico para testar')
+    parser.add_argument('--dry-run', '-d', action='store_true', help='Apenas validar todos os arquivos sem processar')
     
     args = parser.parse_args()
     
@@ -196,7 +196,7 @@ def run_test_mode():
     logger = setup_logging()
     
     if args.dry_run:
-        logger.info("🧪 MODO DRY RUN - Apenas validação")
+        logger.info("🧪 MODO DRY RUN - Apenas validação de todos os arquivos")
         validation = dry_run_validation(SQL_SCRIPTS_DIR)
         
         print("\n📋 RESULTADO DA VALIDAÇÃO:")
@@ -208,7 +208,17 @@ def run_test_mode():
             for invalid in validation['invalid_files']:
                 print(f"  • {invalid['file']}: {invalid['message']}")
         
+        if validation['valid_files'] > 0:
+            logger.info(f"✅ Validação concluída: {validation['valid_files']} arquivos prontos para processamento")
+        else:
+            logger.error("❌ Nenhum arquivo válido encontrado!")
         return
+    
+    # Verificar se --file foi fornecido
+    if not args.file:
+        logger.error("❌ Parâmetro --file é obrigatório quando não usar --dry-run")
+        logger.info("💡 Use: python main.py --file arquivo.sql ou python main.py --dry-run")
+        sys.exit(1)
     
     # Teste de arquivo específico
     from etl_functions import test_single_sql_file
