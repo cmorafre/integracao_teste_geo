@@ -1,0 +1,37 @@
+# ETL TESTE GEO - Requirements (Postgres → MySQL)
+# Instalar com: pip install -r requirements.txt
+
+# Manipulação de dados
+pandas>=1.5.0
+
+# Conexão PostgreSQL (ORIGEM)
+psycopg2-binary>=2.9.0
+
+# Conexão MySQL (DESTINO)
+mysql-connector-python>=8.0.0
+
+# ORM e SQL toolkit
+SQLAlchemy>=1.4.0
+
+# Utilitários adicionais
+python-dateutil>=2.8.0
+
+# Configuração e variáveis de ambiente
+python-dotenv>=1.0.0
+
+# Para desenvolvimento/debug (opcional)
+ipython>=8.0.0
+
+# Notas de instalação:
+#
+# POSTGRESQL:
+# - Ubuntu: sudo apt-get install libpq-dev python3-dev
+# - Se erro de compilação psycopg2: usar psycopg2-binary
+#
+# MYSQL:
+# - Ubuntu: sudo apt-get install default-libmysqlclient-dev
+# - Usar mysql-connector-python (driver oficial Oracle/MySQL)
+#
+# SISTEMA:
+# - Python 3.8+ requerido
+# - Ubuntu: sudo apt-get install python3-pip python3-venv
