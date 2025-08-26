@@ -254,8 +254,8 @@ POSSIBLE_DIRS=(
     "$SCRIPT_DIR"                                    # Mesmo diretório do setup.sh
     "$(pwd)"                                         # Diretório atual
     "$HOME/integracao_etl_geodata"                   # Home do usuário
-    "/tmp/integracao_etl_geodata"                    # Temporário
-    "/tmp/etl_install/integracao_etl_geodata"        # Diretório usado pelo install_full.sh
+    "/tmp/etl_teste_install/"                        # Temporário
+    "/tmp/etl_teste_install/integracao_teste_geo"    # Diretório usado pelo install_full.sh
 )
 
 SOURCE_DIR=""
