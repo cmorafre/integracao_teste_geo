@@ -96,16 +96,21 @@ class ETLProcessor:
         filtered_files = []
         for file_path in sql_files:
             skip_file = False
+            file_name = file_path.name  # Usar apenas o nome do arquivo, não o caminho completo
+            
             for pattern in ETL_CONFIG['ignore_patterns']:
-                if re.search(pattern, str(file_path), re.IGNORECASE):
-                    logger.info(f"⏭️  Ignorando arquivo: {file_path.name}")
+                if re.search(pattern, file_name, re.IGNORECASE):
+                    logger.info(f"⏭️  Ignorando arquivo: {file_name} (padrão: {pattern})")
                     skip_file = True
                     break
             
             if not skip_file:
+                logger.debug(f"✅ Aceito arquivo: {file_name}")
                 filtered_files.append(file_path)
+            else:
+                logger.debug(f"❌ Rejeitado arquivo: {file_name}")
         
-        logger.info(f"📁 Encontrados {len(filtered_files)} arquivos SQL para processamento")
+        logger.info(f"📁 Encontrados {len(filtered_files)} arquivos SQL para processamento ({len(sql_files)} total, {len(sql_files) - len(filtered_files)} ignorados)")
         return sorted(filtered_files)
     
     def extract_data_from_postgres(self, sql_file: Path) -> Optional[pd.DataFrame]:
