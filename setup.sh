@@ -253,7 +253,7 @@ echo -e "📍 Diretório do script: $SCRIPT_DIR"
 POSSIBLE_DIRS=(
     "$SCRIPT_DIR"                                    # Mesmo diretório do setup.sh
     "$(pwd)"                                         # Diretório atual
-    "$HOME/integracao_etl_geodata"                   # Home do usuário
+    "$HOME/integracao_teste_geo"                     # Home do usuário
     "/tmp/etl_teste_install/"                        # Temporário
     "/tmp/etl_teste_install/integracao_teste_geo"    # Diretório usado pelo install_full.sh
 )
@@ -263,9 +263,14 @@ SQL_SOURCE_DIR=""
 
 # Procurar diretório com os arquivos do projeto
 for dir in "${POSSIBLE_DIRS[@]}"; do
-    if [[ -f "$dir/main.py" && -f "$dir/config.py" && -d "$dir/sqls" ]]; then
+    if [[ -f "$dir/main.py" && -f "$dir/config.py" ]]; then
         SOURCE_DIR="$dir"
-        SQL_SOURCE_DIR="$dir/sqls"
+        # Verificar se existe pasta sql_scripts ou sqls
+        if [[ -d "$dir/sql_scripts" ]]; then
+            SQL_SOURCE_DIR="$dir/sql_scripts"
+        elif [[ -d "$dir/sqls" ]]; then
+            SQL_SOURCE_DIR="$dir/sqls"
+        fi
         echo -e "📁 Arquivos do projeto encontrados em: $SOURCE_DIR"
         break
     fi
@@ -275,9 +280,9 @@ if [ -z "$SOURCE_DIR" ]; then
     echo -e "${RED}❌ Não foi possível encontrar os arquivos do projeto!${NC}"
     echo -e "${YELLOW}💡 Certifique-se de que os arquivos estão no mesmo diretório do setup.sh${NC}"
     echo -e "${BLUE}📋 Para copiar manualmente:${NC}"
-    echo -e "cp /caminho/do/projeto/*.py /opt/etl_geodata/"
-    echo -e "cp /caminho/do/projeto/requirements.txt /opt/etl_geodata/"
-    echo -e "cp /caminho/do/projeto/sqls/*.sql /opt/etl_geodata/sql_scripts/"
+    echo -e "cp /caminho/do/projeto/*.py /opt/etl_teste_geo/"
+    echo -e "cp /caminho/do/projeto/requirements.txt /opt/etl_teste_geo/"
+    echo -e "cp /caminho/do/projeto/sql_scripts/*.sql /opt/etl_teste_geo/sql_scripts/"
     exit 1
 fi
 
@@ -306,7 +311,7 @@ if [ -d "$SQL_SOURCE_DIR" ]; then
     if ls "$SQL_SOURCE_DIR"/*.sql 1> /dev/null 2>&1; then
         cp "$SQL_SOURCE_DIR"/*.sql sql_scripts/
         SQL_COUNT=$(ls -1 "$SQL_SOURCE_DIR"/*.sql | wc -l)
-        echo -e "${GREEN}✅ ${SQL_COUNT} arquivos SQL copiados para /opt/etl_geodata/sql_scripts/${NC}"
+        echo -e "${GREEN}✅ ${SQL_COUNT} arquivos SQL copiados para /opt/etl_teste_geo/sql_scripts/${NC}"
         
         # Listar arquivos copiados
         echo -e "${BLUE}📋 Arquivos SQL copiados:${NC}"
@@ -422,7 +427,7 @@ echo -e "6. Configure cron para execução diária: crontab -e"
 echo -e "\n${YELLOW}🔧 COMANDOS ÚTEIS:${NC}"
 echo -e "• Ativar ambiente virtual: cd $PROJECT_DIR && source venv/bin/activate"
 echo -e "• Executar ETL: cd $PROJECT_DIR && python main.py"
-echo -e "• Ver logs: tail -f $PROJECT_DIR/logs/etl_geodata.log"
+echo -e "• Ver logs: tail -f $PROJECT_DIR/logs/etl_teste_geo.log"
 echo -e "• Teste dry-run: python main.py --dry-run"
 
 echo -e "\n${YELLOW}⚙️  CONFIGURAÇÕES:${NC}"
